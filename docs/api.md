@@ -48,7 +48,9 @@ metadata are declared, not independently verified.
 | `decisions` | Saved scoped clarifications and snapshot-relative status |
 | `warnings` | Known extraction, model or snapshot limitations |
 
-`to_dict()` supports JSON serialization; `to_markdown()` creates the readable brief.
+`to_dict()` supports JSON serialization and retains full source hashes.
+`to_markdown()` creates a readable brief without repeated source hashes.
+Use `to_markdown(include_provenance=True)` to append distinct source fingerprints.
 Investigation status is `completed`, `budget_exhausted` or `failed`. Completed means
 the model elected to stop; it does not certify coverage or correctness.
 

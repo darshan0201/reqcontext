@@ -31,14 +31,13 @@ class Brief:
     def to_dict(self):
         return asdict(self)
 
-    def to_markdown(self):
+    def to_markdown(self, *, include_provenance=False):
         lines = ["# Requirement context", "", "## User requirement", "", self.requirement,
                  "", "## Repository evidence", ""]
         for e in self.evidence:
             if e.get("page") is not None:
                 lines.append(f"PDF page {e['page']}; line numbers below refer to extracted page text.")
-            lines += [f"- **{e['id']}** `{e['path']}:{e['start']}-{e['end']}` — {e['symbol'] or e['kind']}",
-                      f"  SHA-256: `{e['hash']}`"]
+            lines += [f"- **{e['id']}** `{e['path']}:{e['start']}-{e['end']}` — {e['symbol'] or e['kind']}"]
         if not self.evidence:
             lines.append("No matching evidence found. This does not establish that the feature is absent.")
         for title, items, key in [("Observations", self.observations, "text"), ("Clarifications", self.questions, "question"), ("Proposed interpretations — not verified facts", self.interpretations, "text")]:
@@ -55,6 +54,10 @@ class Brief:
         lines += [f"- [{d['status']}] {d['question']} → {d['answer']}" for d in self.decisions] or ["None."]
         if self.warnings:
             lines += ["", "## Limitations / warnings", ""] + [f"- {w}" for w in self.warnings]
+        if include_provenance:
+            lines += ["", "## Source fingerprints", ""]
+            for path, digest in dict.fromkeys((e["path"], e["hash"]) for e in self.evidence):
+                lines.append(f"- `{path}` — SHA-256: `{digest}`")
         return "\n".join(lines) + "\n"
 
 

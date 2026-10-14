@@ -8,7 +8,7 @@ async def run():
     with tempfile.TemporaryDirectory() as temp:
         root=Path(temp)/'repo';root.mkdir();(root/'src').mkdir()
         (root/'src/service.py').write_text('def submit_upload(data):\n    return data\n')
-        env=dict(os.environ);env['PYTHONPATH']=str(Path(__file__).resolve().parents[1])
+        env=dict(os.environ);env['PYTHONPATH']=str(Path(__file__).resolve().parents[2])
         parameters=StdioServerParameters(command=sys.executable,args=['-m','reqcontext.mcp_server','--repo',str(root),'--snapshot',str(Path(temp)/'snapshot.db')],env=env)
         async with stdio_client(parameters) as (read,write):
             async with ClientSession(read,write) as session:

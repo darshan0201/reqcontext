@@ -34,7 +34,7 @@ reqcontext snapshot build /path/to/repo --output /path/to/repo-snapshot.db
 reqcontext /path/to/repo --snapshot /path/to/repo-snapshot.db --requirement "Add retry support to firmware download"
 ```
 
-The final command uses the REQCONTEXT model settings from README.md. To inspect
+The final command uses the REQCONTEXT model settings from [README.md](../README.md). To inspect
 source matches without a model, add `--retrieval-only`. To explicitly refresh:
 
 ```bash
@@ -94,7 +94,7 @@ stored references and requires no access to their original files.
 
 The adapter is a local stdio MCP server; it is not an automatically installed
 ChatGPT marketplace plugin. Add it to a client that supports stdio MCP using your
-client's configuration format. `integration/mcp-client.example.json` is an example
+client's configuration format. [MCP client example](../integration/mcp-client.example.json) is an example
 of the common `mcpServers` format; replace paths and use the Python interpreter in
 which the package/extras are installed. Windows accepts absolute Windows paths in
 JSON with appropriate escaping. Configure documents with repeated `--document` args

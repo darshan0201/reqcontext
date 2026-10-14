@@ -1,105 +1,90 @@
-# ReqContext 0.5.1
+# ReqContext
 
-A Python context engine for incomplete implementation requirements, with stored
-repository snapshots and a local MCP adapter.
+Repository context for AI coding agents, built from a reusable source snapshot.
 
-## Current behavior
+Give ReqContext an implementation requirement. It retrieves relevant code and lets
+an LLM identify the folders to inspect, constraints to consider and decisions that
+need clarification. After the initial snapshot, queries reuse stored evidence
+instead of scanning the entire repository again.
 
-Build a snapshot once. Requirements are investigated using its folder map, source
-excerpts, symbols, call-name relationships and selected reference documents. Normal
-analysis never enumerates/reads/hashes live source files after snapshot creation.
-Refresh explicitly when evidence should change. Captured revision/time are shown;
-frozen evidence can be stale. No keyword-triggered semantic questions are generated.
+## What it does
 
-A configured model can select folders, follow evidence, propose applicable
-constraints and ask consequential questions. Without a model, retrieval-only mode
-returns evidence and makes no semantic conclusions. An MCP host can also use its
-own existing model directly with the snapshot tools, without a nested API endpoint.
+- Indexes Python and C source, symbols and folder structure in SQLite.
+- Offers scoped search and symbol lookup through a Python API, CLI or MCP server.
+- Lets a configured model investigate evidence and produce a cited implementation brief.
+- Stores task-specific clarification answers and explicitly selected PDF/text references.
+- Refreshes the snapshot on request, with rollback if an unexpected update fails.
 
-## Install
+ReqContext supplies context; it does not implement the requested code change.
+Search is lexical. Interpretation and clarification selection are performed by the model.
 
-Python 3.11+, SQLite FTS5:
+## Quick start
 
-```bash
-python -m pip install ".[c,documents,mcp]"
-```
-
-The extras are optional: C function parsing uses Tree-sitter, PDF text extraction
-uses pypdf, and MCP stdio uses the v1 SDK compatibility API. The base install uses
-Python AST and text search. This package is not published to PyPI.
-
-## Build and investigate
+Requires Python 3.11+ and SQLite with FTS5. From a checkout of this repository:
 
 ```bash
-reqcontext snapshot build /path/to/repo --output /path/to/snapshot.db
-reqcontext /path/to/repo --snapshot /path/to/snapshot.db --requirement "Add retry support" --retrieval-only
-reqcontext snapshot refresh /path/to/repo --output /path/to/snapshot.db
+python -m pip install -e .
+reqcontext snapshot build examples/upload_app --output example.db
+reqcontext examples/upload_app --snapshot example.db --requirement "Add upload retries" --retrieval-only
 ```
 
-For model-directed interpretation, configure `REQCONTEXT_BASE_URL`,
-`REQCONTEXT_MODEL`, and, if your endpoint requires it, `REQCONTEXT_API_KEY` locally.
-The base URL is the chat-completions API root; the adapter appends
-`/chat/completions`. The endpoint must support JSON-object responses.
+This example runs without an API key and returns source matches. For model-generated
+folder recommendations and clarifications, configure `REQCONTEXT_BASE_URL` and
+`REQCONTEXT_MODEL`, plus `REQCONTEXT_API_KEY` if your endpoint requires it. Store keys
+in your local environment. The endpoint must support JSON chat-completion responses.
 
 ```python
 from reqcontext import analyze
-brief = analyze("Add retry support", repo="/path/to/repo", snapshot="/path/to/snapshot.db")
+
+brief = analyze(
+    "Add upload retries",
+    repo="examples/upload_app",
+    snapshot="example.db",
+)
 print(brief.to_markdown())
-print(brief.scope)
 ```
 
-Reference documents, MCP client setup, refresh semantics, exclusions and limitations
-are detailed in `SNAPSHOT_AND_PLUGIN.md`. Example MCP configuration:
-`integration/mcp-client.example.json`. This is a local MCP server, not a marketplace
-plugin automatically installed into your account.
+The Markdown brief lists source locations and conclusions. Full source fingerprints
+remain available in `brief.to_dict()` or `brief.to_markdown(include_provenance=True)`.
 
-## Validation
-
-65 tests passed. Real stdio initialization/discovery/symbol lookup passed. A real
-text-extractable PDF and nvme-cli folder-scoped snapshot lookup were checked.
-Synthetic 10,000-file indexing took approximately five seconds in this runtime;
-subsequent snapshot queries read no live source files. Those are indexing/integration
-measurements, not evidence of LLM accuracy or end-to-end latency.
+## MCP and optional features
 
 ```bash
-python -m unittest discover -s tests -v
-PYTHONPATH=. python benchmarks/mcp_smoke.py
-PYTHONPATH=. python benchmarks/scale_snapshot.py --output scale.json
+python -m pip install -e ".[c,documents,mcp]"
+python -m reqcontext.mcp_server --repo /path/to/project --snapshot /path/to/snapshot.db
 ```
 
-`PROGRESS_V050.md` describes measurements and the same-tools model comparison runner.
-No unattended model comparison ran here because no endpoint was configured. Prior
-version reports are historical; they do not establish v0.5.0 semantic quality.
+An MCP client's existing model can use the snapshot tools directly. See the
+[usage guide](docs/usage.md) and [client configuration](integration/mcp-client.example.json).
+The package is not currently published to PyPI.
 
-## Design boundaries
+## Project layout
 
-- Folder/constraint selection is model inference, not a newly trained policy.
-- Lexical BM25 search is not semantic search. Name-based call relationships do not
-  resolve aliases, dispatch, macros or same-name definitions.
-- Quotations/citation IDs are checked; semantic entailment/applicability are not proven.
-- PDFs retain page provenance but no OCR, diagram reasoning or perfect table layout.
-- Snapshots are bound to their repository root and are not atomic multi-file captures.
-- Snapshot-mode staleness detection compares saved decisions to the stored snapshot,
-  not live source state. Explicit refresh is necessary after changes.
-- Initial target is a single engineer/client; concurrent refresh writers are untested.
-- Hidden/symlink/generated paths and oversized/binary/non-UTF-8 files are omitted;
-  there is no general secret detector. Only selected references are imported.
-- Model endpoint requests send bounded evidence but schemas/metadata/history add to
-  the total prompt. Message separation does not guarantee prompt-injection resistance.
+| Directory | Purpose |
+|---|---|
+| `reqcontext/` | Library, CLI and MCP implementation |
+| `tests/` | Unit tests and the MCP integration check |
+| `docs/` | Usage, API, architecture and development guidance |
+| `examples/` | Small source repository for the quick start |
+| `integration/` | Example MCP client configuration |
+| `.github/` | CI and contribution templates |
 
-Research rationale: `RESEARCH_DESIGN.md`. Historical assistant-facilitated NVMe audit:
-`NVME_REASONING_AUDIT.md`. Snapshot/MCP ideas already have substantial overlap with
-Aider, Continue and CodeGraph; novelty and adoption value remain to be demonstrated.
+## Documentation
 
-## Documentation and PR preparation
+- [Usage and MCP setup](docs/usage.md)
+- [API reference](docs/api.md)
+- [Architecture](docs/architecture.md)
+- [Testing](docs/testing.md)
+- [Roadmap](docs/roadmap.md)
+- [Contributing](CONTRIBUTING.md)
 
-- `docs/ARCHITECTURE.md`: components, principles and snapshot publication.
-- `docs/API.md`: API fields, model phases and tool behavior.
-- `SNAPSHOT_AND_PLUGIN.md`: build/refresh, MCP and reference setup.
-- `docs/HTTPX_VALIDATION.md`: non-storage test results and remaining retrieval miss.
-- `docs/ROBUSTNESS.md`: implemented safeguards and prioritized future work.
-- `docs/PROVENANCE.md`: original implementation, dependencies and evidence notices.
-- `CONTRIBUTING.md`, `CHANGELOG.md`, `.github/`: contribution and review workflow.
+## Limits and privacy
 
-v0.5.1 makes refresh publication atomic, treats folder prefixes literally, validates
-query limits and adds symbol-fragment lookup. A project license has not yet been selected. Historic reports are labelled by the version they measured.
+Snapshot evidence stays frozen until refresh. Source relationships are syntactic;
+PDF extraction does not provide OCR. Model conclusions require review. A remote
+model receives selected excerpts, and the index is not a secret detector: only use
+repositories and references you are permitted to send to that endpoint.
+
+The initial target is one engineer/client. Concurrent refresh writers and large
+monorepositories have not been validated. See [provenance](docs/provenance.md) for
+dependency information. A project license has not yet been selected.

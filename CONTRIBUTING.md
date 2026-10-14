@@ -1,39 +1,32 @@
 # Contributing
 
-Create an isolated environment and install the project with the features you test:
+## Development setup
 
 ```bash
 python -m venv .venv
-# Activate it using your platform's normal command.
+# Activate the environment using your shell's activation command.
 python -m pip install -e ".[c,documents,mcp]"
 python -m unittest discover -s tests -v
-PYTHONPATH=. python benchmarks/mcp_smoke.py
+python tests/integration/mcp_smoke.py
 ```
 
-Use snapshot-focused tests for new tools: verify no source enumeration on reuse,
-source provenance, bounds, literal path scoping and explicit refresh behavior.
-Add failure-injection coverage for snapshot changes. Model adapters in unit tests
-are scripted; label them as mechanics tests, not semantic-quality results.
+See [testing](docs/testing.md) for coverage and optional dependencies.
 
-For a model comparison, fix repository commit, source selections, model/version,
-requirements and grading criteria. Record model calls/usage and grade unsupported
-claims, missed constraints and unnecessary questions. Do not tune on evaluation
-examples and then describe them as held-out results.
+## Changes and pull requests
 
-Avoid repository-specific aliases or query patches added solely to pass an example.
-Prefer structural tools or model-directed investigation improvements. Document
-scope differences when comparing full search versus folder-scoped retrieval.
+Keep each change focused. Describe the problem, resulting behavior and validation.
+Update the relevant guide when public behavior changes. Add regression coverage
+for behavioral fixes, particularly snapshot reuse, refresh rollback and evidence bounds.
 
-## Pull requests
+Do not add repository-specific keyword rules to improve individual evaluation cases.
+Semantic interpretation belongs to the model; structural tools and validation belong
+to the library. Unit tests use scripted models and do not measure reasoning quality.
 
-Explain the concrete failure, resulting behavior, tests and limits. Use the template
-under `.github/`. Keep edits focused. Do not commit credentials, local snapshots,
-virtual environments, scraped private repositories or installed dependencies.
-Include provenance/permission information for external excerpts or fixtures.
+Keep benchmark runs, generated reports, source snapshots, credentials and private
+repository content out of commits. Reproduce experiments locally and summarize
+relevant results in the PR instead of adding raw output to the project.
 
-## Publishing
+## Release status
 
-Before a public release, the owner must select the project's license, choose a
-repository/maintainer identity and review included third-party evidence fixtures.
-No project license is selected in this draft. Dependency licensing and source
-excerpt notices are documented in `docs/PROVENANCE.md`.
+The owner must select a project license before an open-source release. Dependency
+provenance is documented in [provenance](docs/provenance.md).
