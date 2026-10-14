@@ -11,6 +11,15 @@
 - C macro parse guard, unsupported-citation rejection and quoted-source checks.
 - Bounded evidence, tool rounds and transport response sizes.
 
+## Interoperability release criteria
+
+Validate the same snapshot tools with at least two independent MCP hosts before
+claiming cross-client support. Record host version, configuration, initialization,
+tool discovery, lookup, explicit refresh and error handling. Keep provider-specific
+configuration outside the indexing and retrieval modules. Add a native model adapter
+only when a direct API workflow requires it; host-driven MCP should not require a
+second provider credential. Company adoption requires independent evidence.
+
 ## Highest-value next improvements
 
 1. **Unattended model evaluation:** repeated labelled tasks across repositories/models,

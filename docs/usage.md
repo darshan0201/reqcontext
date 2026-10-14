@@ -124,3 +124,25 @@ writers. Initial deployment target is one engineer/client.
 ## v0.5.1 refresh publication
 
 Refresh uses one SQLite transaction for source/reference rows, derived maps and capture metadata. Unexpected failure preserves the previous snapshot. Individually failed references are removed with warnings in an otherwise successful refresh. This does not make filesystem capture atomic or automatically detect stale files.
+
+## Provider interoperability
+
+The integration boundary is the MCP tool interface. The host chooses its model;
+ReqContext supplies repository evidence. Host-driven lookup does not require the
+library's own model API key or a second reasoning endpoint.
+
+| Integration path | Current status |
+|---|---|
+| MCP over local stdio | Automated SDK client/server smoke coverage |
+| OpenAI and Anthropic coding clients | Intended integration targets; individual client validation pending |
+| Other clients supporting compatible stdio MCP tools | Protocol-level integration path; client-specific validation required |
+| Direct chat-completions-compatible endpoint | Adapter implemented; live provider compatibility not validated in CI |
+| Native Anthropic Messages API | No built-in adapter; use host-driven MCP or supply a model callable |
+| Remote HTTP MCP hosting | Not implemented |
+
+The JSON configuration under `integration/` illustrates a common client schema;
+it is not a universal configuration format. Check the chosen client's supported
+transport and configuration before connecting it.
+
+Client compatibility is distinct from company adoption. Do not claim that OpenAI,
+Anthropic or another company uses, endorses or has validated this project.
