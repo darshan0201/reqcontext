@@ -1,0 +1,221 @@
+{
+  "repo": "https://github.com/encode/httpx",
+  "commit": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+  "method": "Six manually authored requirements, inspected primary symbol locations. Arbitrary non-storage repo selection, not statistically random sampling. No model calls. Exact-symbol lookup uses known expected targets and is not a discovery metric.",
+  "snapshot": {
+    "captured_at": "2026-10-13T18:02:10.907713+00:00",
+    "git_revision": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+    "revision_note": "HEAD is recorded, but indexed files may include uncommitted changes.",
+    "files": 90,
+    "documents": 0,
+    "excludes": [],
+    "documents_manifest": [],
+    "document_warnings": []
+  },
+  "build_seconds": 0.27923201199996583,
+  "query_median_seconds": 0.002411974499977987,
+  "file_hits_at_5": 6,
+  "symbol_hits_at_5": 5,
+  "folder_scoped_file_hits_at_5": 6,
+  "all_snapshot_queries_blocked_live_enumeration": true,
+  "results": [
+    {
+      "requirement": "Stop forwarding authorization credentials when redirecting to another origin.",
+      "expected_primary_path": "httpx/_client.py",
+      "expected_symbol_or_family": "BaseClient._redirect_headers",
+      "whole_snapshot_file_rank": 2,
+      "whole_snapshot_symbol_rank": 2,
+      "httpx_scoped_file_rank": 1,
+      "snapshot_query_seconds": 0.002448830000048474,
+      "source_files_read": 0,
+      "symbol_lookup_succeeded": true,
+      "initial_results": [
+        {
+          "path": "tests/test_auth.py",
+          "symbol": "test_digest_auth_rfc_2069"
+        },
+        {
+          "path": "httpx/_client.py",
+          "symbol": "BaseClient._redirect_headers"
+        },
+        {
+          "path": "docs/advanced/proxies.md",
+          "symbol": ""
+        },
+        {
+          "path": "tests/client/test_headers.py",
+          "symbol": "test_is_https_redirect"
+        },
+        {
+          "path": "tests/client/test_headers.py",
+          "symbol": "test_is_not_https_redirect"
+        }
+      ]
+    },
+    {
+      "requirement": "Ignore environment proxy settings when trust_env is disabled.",
+      "expected_primary_path": "httpx/_client.py",
+      "expected_symbol_or_family": "BaseClient._get_proxy_map",
+      "whole_snapshot_file_rank": 4,
+      "whole_snapshot_symbol_rank": null,
+      "httpx_scoped_file_rank": 2,
+      "snapshot_query_seconds": 0.001924611000049481,
+      "source_files_read": 0,
+      "symbol_lookup_succeeded": true,
+      "initial_results": [
+        {
+          "path": "docs/environment_variables.md",
+          "symbol": ""
+        },
+        {
+          "path": "httpx/_api.py",
+          "symbol": "request"
+        },
+        {
+          "path": "docs/environment_variables.md",
+          "symbol": ""
+        },
+        {
+          "path": "httpx/_client.py",
+          "symbol": "Client"
+        },
+        {
+          "path": "httpx/_client.py",
+          "symbol": "Client.__init__"
+        }
+      ]
+    },
+    {
+      "requirement": "Configure different timeout values for connect, read, write and pool acquisition.",
+      "expected_primary_path": "httpx/_config.py",
+      "expected_symbol_or_family": "Timeout",
+      "whole_snapshot_file_rank": 1,
+      "whole_snapshot_symbol_rank": 1,
+      "httpx_scoped_file_rank": 1,
+      "snapshot_query_seconds": 0.0023751189999074995,
+      "source_files_read": 0,
+      "symbol_lookup_succeeded": true,
+      "initial_results": [
+        {
+          "path": "httpx/_config.py",
+          "symbol": "Timeout.__init__"
+        },
+        {
+          "path": "httpx/_config.py",
+          "symbol": "Timeout.__repr__"
+        },
+        {
+          "path": "docs/advanced/timeouts.md",
+          "symbol": ""
+        },
+        {
+          "path": "httpx/_config.py",
+          "symbol": "Timeout.as_dict"
+        },
+        {
+          "path": "httpx/_config.py",
+          "symbol": "Timeout.__eq__"
+        }
+      ]
+    },
+    {
+      "requirement": "Stream response bytes in configurable chunk sizes.",
+      "expected_primary_path": "httpx/_models.py",
+      "expected_symbol_or_family": "Response.iter_bytes",
+      "whole_snapshot_file_rank": 3,
+      "whole_snapshot_symbol_rank": 5,
+      "httpx_scoped_file_rank": 1,
+      "snapshot_query_seconds": 0.002770015000123749,
+      "source_files_read": 0,
+      "symbol_lookup_succeeded": true,
+      "initial_results": [
+        {
+          "path": "tests/models/test_responses.py",
+          "symbol": "test_iter_bytes_with_chunk_size"
+        },
+        {
+          "path": "tests/models/test_responses.py",
+          "symbol": "test_aiter_bytes_with_chunk_size"
+        },
+        {
+          "path": "httpx/_models.py",
+          "symbol": "Response.iter_raw"
+        },
+        {
+          "path": "httpx/_models.py",
+          "symbol": "Response.aiter_raw"
+        },
+        {
+          "path": "httpx/_models.py",
+          "symbol": "Response.iter_bytes"
+        }
+      ]
+    },
+    {
+      "requirement": "Set limits on total connections and keep-alive connections.",
+      "expected_primary_path": "httpx/_config.py",
+      "expected_symbol_or_family": "Limits",
+      "whole_snapshot_file_rank": 1,
+      "whole_snapshot_symbol_rank": 1,
+      "httpx_scoped_file_rank": 1,
+      "snapshot_query_seconds": 0.0016965970000910602,
+      "source_files_read": 0,
+      "symbol_lookup_succeeded": true,
+      "initial_results": [
+        {
+          "path": "httpx/_config.py",
+          "symbol": "Limits"
+        },
+        {
+          "path": "docs/advanced/resource-limits.md",
+          "symbol": ""
+        },
+        {
+          "path": "tests/client/test_headers.py",
+          "symbol": "test_header_update"
+        },
+        {
+          "path": "CHANGELOG.md",
+          "symbol": ""
+        },
+        {
+          "path": "tests/test_config.py",
+          "symbol": "test_limits_repr"
+        }
+      ]
+    },
+    {
+      "requirement": "Merge client cookies with cookies supplied for an individual request.",
+      "expected_primary_path": "httpx/_client.py",
+      "expected_symbol_or_family": "BaseClient._merge_cookies",
+      "whole_snapshot_file_rank": 1,
+      "whole_snapshot_symbol_rank": 1,
+      "httpx_scoped_file_rank": 1,
+      "snapshot_query_seconds": 0.0029439669999646867,
+      "source_files_read": 0,
+      "symbol_lookup_succeeded": true,
+      "initial_results": [
+        {
+          "path": "httpx/_client.py",
+          "symbol": "BaseClient._merge_cookies"
+        },
+        {
+          "path": "httpx/_client.py",
+          "symbol": "BaseClient.build_request"
+        },
+        {
+          "path": "httpx/_client.py",
+          "symbol": "Client.request"
+        },
+        {
+          "path": "httpx/_client.py",
+          "symbol": "AsyncClient.request"
+        },
+        {
+          "path": "httpx/_client.py",
+          "symbol": "BaseClient._merge_headers"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+[
+  {
+    "query": "Report reservation registrants in JSON format",
+    "seconds": 3.277251000999968,
+    "stats": {
+      "indexed": 1089,
+      "reused": 0,
+      "removed": 0,
+      "skipped": 0
+    },
+    "results": [
+      {
+        "path": "src/nvme-print-json.c",
+        "symbol": "json_nvme_resv_report"
+      },
+      {
+        "path": "Documentation/nvme-resv-report.txt",
+        "symbol": ""
+      },
+      {
+        "path": "Documentation/nvme-resv-release.txt",
+        "symbol": ""
+      },
+      {
+        "path": "libnvme/src/nvme/nvme-types-nvm.h",
+        "symbol": ""
+      },
+      {
+        "path": "Documentation/nvme-resv-acquire.txt",
+        "symbol": ""
+      }
+    ]
+  },
+  {
+    "query": "Download firmware image in chunks with an offset",
+    "seconds": 0.11214243400036139,
+    "stats": {
+      "indexed": 0,
+      "reused": 1089,
+      "removed": 0,
+      "skipped": 0
+    },
+    "results": [
+      {
+        "path": "tests/cli/micron/micron_options_mock_test.py",
+        "symbol": "TestMicronSelectDownload.test_chunks_cover_the_whole_image"
+      },
+      {
+        "path": "Documentation/nvme-fw-download.txt",
+        "symbol": ""
+      },
+      {
+        "path": "tests/cli/micron/micron_options_mock_test.py",
+        "symbol": "TestMicronSelectDownload.test_image_is_sent_in_chunks"
+      },
+      {
+        "path": "libnvme/src/nvme/nvme-cmds-base.h",
+        "symbol": ""
+      },
+      {
+        "path": "tests/cli/micron/micron_options_mock_test.py",
+        "symbol": "TestMicronSelectDownload.test_a_short_final_chunk_is_sent"
+      }
+    ]
+  },
+  {
+    "query": "Show the sanitize status progress log",
+    "seconds": 0.14180988099997194,
+    "stats": {
+      "indexed": 0,
+      "reused": 1089,
+      "removed": 0,
+      "skipped": 0
+    },
+    "results": [
+      {
+        "path": "src/nvme-cmds-sanitize.c",
+        "symbol": "check_sanitize"
+      },
+      {
+        "path": "libnvme/src/nvme/nvme-types-base.h",
+        "symbol": ""
+      },
+      {
+        "path": "src/nvme-print-stdout-log.c",
+        "symbol": "nvme_show_pel_sanitize_completion_event"
+      },
+      {
+        "path": "libnvme/src/nvme/nvme-types-base.h",
+        "symbol": ""
+      },
+      {
+        "path": "src/nvme-print.c",
+        "symbol": "nvme_sstat_status_to_string"
+      }
+    ]
+  },
+  {
+    "query": "Read the error log with a configurable number of entries",
+    "seconds": 0.13001039599976139,
+    "stats": {
+      "indexed": 0,
+      "reused": 1089,
+      "removed": 0,
+      "skipped": 0
+    },
+    "results": [
+      {
+        "path": "plugins/ocp/ocp-nvme.h",
+        "symbol": ""
+      },
+      {
+        "path": "plugins/wdc/wdc-nvme.c",
+        "symbol": "wdc_get_fw_act_history"
+      },
+      {
+        "path": "libnvme/src/nvme/nvme-types-base.h",
+        "symbol": ""
+      },
+      {
+        "path": "libnvme/src/nvme/nvme-cmds-base.h",
+        "symbol": ""
+      },
+      {
+        "path": "plugins/ocp/ocp-nvme.c",
+        "symbol": "ocp_tcg_configuration_log"
+      }
+    ]
+  }
+]

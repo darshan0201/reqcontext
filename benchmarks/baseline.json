@@ -1,0 +1,533 @@
+{
+  "python": "3.12.14",
+  "repositories": {
+    "click": {
+      "url": "https://github.com/pallets/click.git",
+      "commit": "2247b35ea1c47c727d7a06e51fa280e12a863ff6",
+      "cold_seconds": 0.6124330669999836,
+      "warm_median_seconds": 0.015992854999694828,
+      "cold_stats": {
+        "indexed": 142,
+        "reused": 0,
+        "removed": 0,
+        "skipped": 0
+      },
+      "warm_stats": {
+        "indexed": 0,
+        "reused": 142,
+        "removed": 0,
+        "skipped": 0
+      },
+      "chunks": 3787,
+      "cache_bytes": 6082560,
+      "queries": [
+        {
+          "split": "tune",
+          "query": "Allow the confirmation prompt to accept a custom default answer",
+          "expected_path": "src/click/termui.py",
+          "expected_symbol": "confirm",
+          "file_rank": 2,
+          "symbol_rank": null,
+          "seconds": 0.01868225899988829,
+          "results": [
+            {
+              "path": "src/click/core.py",
+              "symbol": "",
+              "score": 16.5082
+            },
+            {
+              "path": "src/click/termui.py",
+              "symbol": "",
+              "score": 15.7705
+            },
+            {
+              "path": "tests/test_termui.py",
+              "symbol": "test_confirmation_prompt",
+              "score": 15.0829
+            },
+            {
+              "path": "src/click/core.py",
+              "symbol": "Option.prompt_for_value",
+              "score": 14.2418
+            },
+            {
+              "path": "src/click/termui.py",
+              "symbol": "prompt",
+              "score": 14.1588
+            }
+          ],
+          "questions": 1
+        },
+        {
+          "split": "tune",
+          "query": "Make choice parameter validation ignore case",
+          "expected_path": "src/click/types.py",
+          "expected_symbol": "Choice",
+          "file_rank": 3,
+          "symbol_rank": 5,
+          "seconds": 0.018477675000212912,
+          "results": [
+            {
+              "path": "docs/parameter-types.md",
+              "symbol": "",
+              "score": 13.9325
+            },
+            {
+              "path": "docs/parameter-types.md",
+              "symbol": "",
+              "score": 13.8983
+            },
+            {
+              "path": "src/click/types.py",
+              "symbol": "",
+              "score": 13.1753
+            },
+            {
+              "path": "docs/parameter-types.md",
+              "symbol": "",
+              "score": 13.1294
+            },
+            {
+              "path": "src/click/types.py",
+              "symbol": "Choice",
+              "score": 12.1801
+            }
+          ],
+          "questions": 0
+        },
+        {
+          "split": "holdout",
+          "query": "Change how a command group resolves an unknown subcommand",
+          "expected_path": "src/click/core.py",
+          "expected_symbol": "Group.resolve_command",
+          "file_rank": 3,
+          "symbol_rank": null,
+          "seconds": 0.018922664999990957,
+          "results": [
+            {
+              "path": "src/click/parser.py",
+              "symbol": "",
+              "score": 13.6599
+            },
+            {
+              "path": "tests/test_commands.py",
+              "symbol": "test_unknown_command",
+              "score": 12.4437
+            },
+            {
+              "path": "src/click/core.py",
+              "symbol": "",
+              "score": 12.1401
+            },
+            {
+              "path": "tests/test_custom_classes.py",
+              "symbol": "test_group_command_class",
+              "score": 12.0572
+            },
+            {
+              "path": "docs/complex.md",
+              "symbol": "",
+              "score": 11.857
+            }
+          ],
+          "questions": 1
+        },
+        {
+          "split": "holdout",
+          "query": "Support entering a hidden password twice for confirmation",
+          "expected_path": "src/click/termui.py",
+          "expected_symbol": "prompt",
+          "file_rank": null,
+          "symbol_rank": null,
+          "seconds": 0.01926696400005312,
+          "results": [
+            {
+              "path": "src/click/decorators.py",
+              "symbol": "password_option",
+              "score": 18.4277
+            },
+            {
+              "path": "tests/test_termui.py",
+              "symbol": "test_hide_input_confirmation_prompt_mismatch_unaffected",
+              "score": 16.1221
+            },
+            {
+              "path": "tests/test_termui.py",
+              "symbol": "test_confirmation_prompt",
+              "score": 15.9583
+            },
+            {
+              "path": "docs/option-decorators.md",
+              "symbol": "",
+              "score": 15.8269
+            },
+            {
+              "path": "docs/option-decorators.md",
+              "symbol": "",
+              "score": 14.2359
+            }
+          ],
+          "questions": 1
+        }
+      ]
+    },
+    "requests": {
+      "url": "https://github.com/psf/requests.git",
+      "commit": "611c6162cbc4ac2020a2f91c7cfa4f3abf9bbb60",
+      "cold_seconds": 0.23840642799996203,
+      "warm_median_seconds": 0.007458756999767502,
+      "cold_stats": {
+        "indexed": 61,
+        "reused": 0,
+        "removed": 0,
+        "skipped": 0
+      },
+      "warm_stats": {
+        "indexed": 0,
+        "reused": 61,
+        "removed": 0,
+        "skipped": 0
+      },
+      "chunks": 1558,
+      "cache_bytes": 2551808,
+      "queries": [
+        {
+          "split": "tune",
+          "query": "Limit redirects and preserve request history",
+          "expected_path": "src/requests/sessions.py",
+          "expected_symbol": "SessionRedirectMixin.resolve_redirects",
+          "file_rank": 1,
+          "symbol_rank": null,
+          "seconds": 0.009706975999961287,
+          "results": [
+            {
+              "path": "src/requests/sessions.py",
+              "symbol": "",
+              "score": 10.5301
+            },
+            {
+              "path": "tests/test_requests.py",
+              "symbol": "",
+              "score": 10.035
+            },
+            {
+              "path": "src/requests/models.py",
+              "symbol": "",
+              "score": 8.7435
+            },
+            {
+              "path": "tests/test_requests.py",
+              "symbol": "TestRequests.test_redirect_history_no_self_reference",
+              "score": 8.3322
+            },
+            {
+              "path": "src/requests/sessions.py",
+              "symbol": "",
+              "score": 8.068
+            }
+          ],
+          "questions": 0
+        },
+        {
+          "split": "tune",
+          "query": "Configure automatic retries for failed HTTP connections",
+          "expected_path": "src/requests/adapters.py",
+          "expected_symbol": "HTTPAdapter",
+          "file_rank": 2,
+          "symbol_rank": 5,
+          "seconds": 0.009382705999996688,
+          "results": [
+            {
+              "path": "docs/user/advanced.rst",
+              "symbol": "",
+              "score": 17.9712
+            },
+            {
+              "path": "src/requests/adapters.py",
+              "symbol": "",
+              "score": 16.0579
+            },
+            {
+              "path": "src/requests/exceptions.py",
+              "symbol": "RetryError",
+              "score": 13.18
+            },
+            {
+              "path": "tests/test_requests.py",
+              "symbol": "",
+              "score": 11.9426
+            },
+            {
+              "path": "src/requests/adapters.py",
+              "symbol": "HTTPAdapter.__init__",
+              "score": 11.8851
+            }
+          ],
+          "questions": 3
+        },
+        {
+          "split": "holdout",
+          "query": "Respect proxy environment variables when preparing session settings",
+          "expected_path": "src/requests/sessions.py",
+          "expected_symbol": "Session.merge_environment_settings",
+          "file_rank": null,
+          "symbol_rank": null,
+          "seconds": 0.009527240000352322,
+          "results": [
+            {
+              "path": "tests/test_requests.py",
+              "symbol": "TestRequests.test_respect_proxy_env_on_send_session_prepared_request",
+              "score": 21.1936
+            },
+            {
+              "path": "tests/test_requests.py",
+              "symbol": "TestRequests.test_respect_proxy_env_on_send_self_prepared_request",
+              "score": 20.3132
+            },
+            {
+              "path": "tests/test_requests.py",
+              "symbol": "TestRequests.test_respect_proxy_env_on_send_with_redirects",
+              "score": 19.3895
+            },
+            {
+              "path": "tests/test_requests.py",
+              "symbol": "TestRequests.test_respect_proxy_env_on_get",
+              "score": 18.5308
+            },
+            {
+              "path": "tests/test_requests.py",
+              "symbol": "TestRequests.test_respect_proxy_env_on_request",
+              "score": 18.3455
+            }
+          ],
+          "questions": 1
+        },
+        {
+          "split": "holdout",
+          "query": "Customize how a request body is prepared from JSON data",
+          "expected_path": "src/requests/models.py",
+          "expected_symbol": "PreparedRequest.prepare_body",
+          "file_rank": 1,
+          "symbol_rank": 1,
+          "seconds": 0.010788416999730543,
+          "results": [
+            {
+              "path": "src/requests/models.py",
+              "symbol": "PreparedRequest.prepare_body",
+              "score": 14.5308
+            },
+            {
+              "path": "tests/test_requests.py",
+              "symbol": "TestRequests.test_custom_content_type",
+              "score": 12.0949
+            },
+            {
+              "path": "src/requests/sessions.py",
+              "symbol": "",
+              "score": 12.0704
+            },
+            {
+              "path": "tests/test_requests.py",
+              "symbol": "TestRequests.test_json_param_post_should_not_override_data_param",
+              "score": 11.7815
+            },
+            {
+              "path": "tests/test_requests.py",
+              "symbol": "TestRequests.test_post_with_custom_mapping",
+              "score": 11.7082
+            }
+          ],
+          "questions": 1
+        }
+      ]
+    },
+    "jinja": {
+      "url": "https://github.com/pallets/jinja.git",
+      "commit": "5ef70112a1ff19c05324ff889dd30405b1002044",
+      "cold_seconds": 0.4699481369998466,
+      "warm_median_seconds": 0.009344969999801833,
+      "cold_stats": {
+        "indexed": 78,
+        "reused": 0,
+        "removed": 0,
+        "skipped": 0
+      },
+      "warm_stats": {
+        "indexed": 0,
+        "reused": 78,
+        "removed": 0,
+        "skipped": 0
+      },
+      "chunks": 3040,
+      "cache_bytes": 4550656,
+      "queries": [
+        {
+          "split": "tune",
+          "query": "Reload a cached template when its source file changes",
+          "expected_path": "src/jinja2/environment.py",
+          "expected_symbol": "Environment._load_template",
+          "file_rank": 1,
+          "symbol_rank": null,
+          "seconds": 0.019507403000261547,
+          "results": [
+            {
+              "path": "src/jinja2/environment.py",
+              "symbol": "",
+              "score": 23.5529
+            },
+            {
+              "path": "src/jinja2/loaders.py",
+              "symbol": "BaseLoader.get_source",
+              "score": 18.0297
+            },
+            {
+              "path": "src/jinja2/bccache.py",
+              "symbol": "",
+              "score": 17.7098
+            },
+            {
+              "path": "tests/test_loader.py",
+              "symbol": "TestLoaders.test_caching.TestLoader.get_source",
+              "score": 15.4842
+            },
+            {
+              "path": "docs/api.rst",
+              "symbol": "",
+              "score": 14.8105
+            }
+          ],
+          "questions": 1
+        },
+        {
+          "split": "tune",
+          "query": "Search multiple filesystem directories for a template",
+          "expected_path": "src/jinja2/loaders.py",
+          "expected_symbol": "FileSystemLoader",
+          "file_rank": 2,
+          "symbol_rank": null,
+          "seconds": 0.014257917000122688,
+          "results": [
+            {
+              "path": "tests/conftest.py",
+              "symbol": "filesystem_loader",
+              "score": 15.4681
+            },
+            {
+              "path": "src/jinja2/loaders.py",
+              "symbol": "",
+              "score": 14.94
+            },
+            {
+              "path": "tests/test_loader.py",
+              "symbol": "TestFileSystemLoader.test_error_includes_paths",
+              "score": 13.5637
+            },
+            {
+              "path": "src/jinja2/loaders.py",
+              "symbol": "",
+              "score": 12.6869
+            },
+            {
+              "path": "src/jinja2/bccache.py",
+              "symbol": "",
+              "score": 11.974
+            }
+          ],
+          "questions": 0
+        },
+        {
+          "split": "holdout",
+          "query": "Change parsing of the for loop and its optional else block",
+          "expected_path": "src/jinja2/parser.py",
+          "expected_symbol": "Parser.parse_for",
+          "file_rank": 1,
+          "symbol_rank": 3,
+          "seconds": 0.012547695000193926,
+          "results": [
+            {
+              "path": "src/jinja2/parser.py",
+              "symbol": "",
+              "score": 10.5292
+            },
+            {
+              "path": "src/jinja2/parser.py",
+              "symbol": "",
+              "score": 10.2103
+            },
+            {
+              "path": "src/jinja2/parser.py",
+              "symbol": "Parser.parse_for",
+              "score": 10.0547
+            },
+            {
+              "path": "src/jinja2/parser.py",
+              "symbol": "Parser.parse_call_block",
+              "score": 9.8331
+            },
+            {
+              "path": "src/jinja2/compiler.py",
+              "symbol": "",
+              "score": 9.7318
+            }
+          ],
+          "questions": 0
+        },
+        {
+          "split": "holdout",
+          "query": "Choose HTML autoescaping based on a template filename extension",
+          "expected_path": "src/jinja2/utils.py",
+          "expected_symbol": "select_autoescape",
+          "file_rank": 1,
+          "symbol_rank": null,
+          "seconds": 0.012270714999885968,
+          "results": [
+            {
+              "path": "src/jinja2/utils.py",
+              "symbol": "",
+              "score": 19.5395
+            },
+            {
+              "path": "docs/api.rst",
+              "symbol": "",
+              "score": 13.099
+            },
+            {
+              "path": "tests/test_utils.py",
+              "symbol": "TestHelpers.test_autoescape_select",
+              "score": 12.3102
+            },
+            {
+              "path": "docs/templates.rst",
+              "symbol": "",
+              "score": 11.6997
+            },
+            {
+              "path": "src/jinja2/environment.py",
+              "symbol": "",
+              "score": 11.6372
+            }
+          ],
+          "questions": 0
+        }
+      ]
+    }
+  },
+  "method": "Four manually authored queries per repository; 2 tuning + 2 held-out. File hit@5 and symbol hit@5, not end-to-end agent correctness. Same machine; caches and timing vary.",
+  "summary": {
+    "all": {
+      "count": 12,
+      "file_hits_at_5": 10,
+      "symbol_hits_at_5": 4
+    },
+    "tune": {
+      "count": 6,
+      "file_hits_at_5": 6,
+      "symbol_hits_at_5": 2
+    },
+    "holdout": {
+      "count": 6,
+      "file_hits_at_5": 4,
+      "symbol_hits_at_5": 2
+    }
+  }
+}

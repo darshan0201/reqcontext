@@ -1,0 +1,66 @@
+{
+  "method": "Name-fragment lookup, not natural-language discovery score",
+  "query": "proxy",
+  "prefix": "httpx",
+  "result": {
+    "symbols": [
+      {
+        "path": "httpx/_client.py",
+        "symbol": "AsyncClient._init_proxy_transport",
+        "kind": "function",
+        "start": 1454,
+        "end": 1472
+      },
+      {
+        "path": "httpx/_client.py",
+        "symbol": "BaseClient._get_proxy_map",
+        "kind": "function",
+        "start": 239,
+        "end": 251
+      },
+      {
+        "path": "httpx/_client.py",
+        "symbol": "Client._init_proxy_transport",
+        "kind": "function",
+        "start": 740,
+        "end": 758
+      },
+      {
+        "path": "httpx/_config.py",
+        "symbol": "Proxy",
+        "kind": "class",
+        "start": 201,
+        "end": 234
+      },
+      {
+        "path": "httpx/_config.py",
+        "symbol": "Proxy.__init__",
+        "kind": "function",
+        "start": 202,
+        "end": 224
+      },
+      {
+        "path": "httpx/_config.py",
+        "symbol": "Proxy.__repr__",
+        "kind": "function",
+        "start": 235,
+        "end": 243
+      },
+      {
+        "path": "httpx/_config.py",
+        "symbol": "Proxy.raw_auth",
+        "kind": "function",
+        "start": 227,
+        "end": 233
+      },
+      {
+        "path": "httpx/_exceptions.py",
+        "symbol": "ProxyError",
+        "kind": "class",
+        "start": 202,
+        "end": 205
+      }
+    ],
+    "truncated": false
+  }
+}

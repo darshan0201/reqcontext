@@ -1,0 +1,29 @@
+{
+  "files": 501,
+  "python_functions": 6001,
+  "cold_seconds": 0.36432594699999754,
+  "warm_median_seconds": 0.03666455500001575,
+  "warm_speedup_vs_cold": 9.936734456475499,
+  "one_file_change_seconds": 0.03729675199997473,
+  "cold_stats": {
+    "indexed": 501,
+    "reused": 0,
+    "removed": 0,
+    "skipped": 0
+  },
+  "warm_stats": {
+    "indexed": 0,
+    "reused": 501,
+    "removed": 0,
+    "skipped": 0
+  },
+  "one_file_change_stats": {
+    "indexed": 1,
+    "reused": 500,
+    "removed": 0,
+    "skipped": 0
+  },
+  "same_results_on_warm": true,
+  "expected_target_rank": 1,
+  "limitations": "Synthetic local workload; warm filesystem caches; not an LLM quality benchmark. Refresh still reads and hashes every eligible file."
+}

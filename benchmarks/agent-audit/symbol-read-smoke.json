@@ -1,0 +1,16 @@
+{
+  "event": {
+    "tool": "read_symbol",
+    "path": "plugins/fw/fw-plugin.c",
+    "symbol": "fw_download_single",
+    "matching_chunks": 4,
+    "new_evidence_ids": [
+      "E1",
+      "E2",
+      "E3",
+      "E4"
+    ]
+  },
+  "all_excerpts_belong_to_requested_symbol": true,
+  "evidence_chars": 2145
+}

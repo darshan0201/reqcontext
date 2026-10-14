@@ -1,0 +1,130 @@
+[
+  {
+    "query": "Report reservation registrants in JSON format",
+    "seconds": 2.7775976959997024,
+    "stats": {
+      "indexed": 1089,
+      "reused": 0,
+      "removed": 0,
+      "skipped": 0
+    },
+    "results": [
+      {
+        "path": "src/nvme-print-json.c",
+        "symbol": "json_nvme_resv_report"
+      },
+      {
+        "path": "plugins/resv/resv-plugin.c",
+        "symbol": "resv_report_size"
+      },
+      {
+        "path": "Documentation/nvme-resv-report.txt",
+        "symbol": ""
+      },
+      {
+        "path": "Documentation/nvme-resv-release.txt",
+        "symbol": ""
+      },
+      {
+        "path": "src/nvme-print-json.c",
+        "symbol": "json_feature_show_fields_resv_nf_mask"
+      }
+    ]
+  },
+  {
+    "query": "Download firmware image in chunks with an offset",
+    "seconds": 0.1131787809999878,
+    "stats": {
+      "indexed": 0,
+      "reused": 1089,
+      "removed": 0,
+      "skipped": 0
+    },
+    "results": [
+      {
+        "path": "Documentation/nvme-fw-download.txt",
+        "symbol": ""
+      },
+      {
+        "path": "libnvme/src/nvme/ioctl-win.c",
+        "symbol": "submit_admin_fw_download"
+      },
+      {
+        "path": "plugins/fw/fw-plugin.c",
+        "symbol": "fw_download"
+      },
+      {
+        "path": "libnvme/src/nvme/nvme-cmds-base.h",
+        "symbol": ""
+      },
+      {
+        "path": "Documentation/nvme-fw-download.txt",
+        "symbol": ""
+      }
+    ]
+  },
+  {
+    "query": "Show the sanitize status progress log",
+    "seconds": 0.13614910999967833,
+    "stats": {
+      "indexed": 0,
+      "reused": 1089,
+      "removed": 0,
+      "skipped": 0
+    },
+    "results": [
+      {
+        "path": "src/nvme-cmds-sanitize.c",
+        "symbol": "check_sanitize"
+      },
+      {
+        "path": "src/nvme-print-stdout-log.c",
+        "symbol": "nvme_show_pel_sanitize_completion_event"
+      },
+      {
+        "path": "src/nvme-print.c",
+        "symbol": "nvme_sstat_status_to_string"
+      },
+      {
+        "path": "src/nvme-cmds-sanitize.c",
+        "symbol": "wait_sanitize"
+      },
+      {
+        "path": "src/nvme-print-stdout-log.c",
+        "symbol": "stdout_sanitize_log"
+      }
+    ]
+  },
+  {
+    "query": "Read the error log with a configurable number of entries",
+    "seconds": 0.12622012100018765,
+    "stats": {
+      "indexed": 0,
+      "reused": 1089,
+      "removed": 0,
+      "skipped": 0
+    },
+    "results": [
+      {
+        "path": "plugins/wdc/wdc-nvme.c",
+        "symbol": "wdc_get_fw_act_history"
+      },
+      {
+        "path": "plugins/ocp/ocp-nvme.c",
+        "symbol": "ocp_tcg_configuration_log"
+      },
+      {
+        "path": "plugins/ocp/ocp-nvme.c",
+        "symbol": "error_injection_set"
+      },
+      {
+        "path": "plugins/log/log-plugin.c",
+        "symbol": "get_error_log"
+      },
+      {
+        "path": "plugins/ibm/ibm-nvme.c",
+        "symbol": "show_ibm_smart_log"
+      }
+    ]
+  }
+]

@@ -1,0 +1,47 @@
+{
+  "method": "Synthetic Python files, standard local storage, nine repeated snapshot analyses. Peak RSS is cumulative process high-water mark. No model reasoning or token/quality measurement.",
+  "results": [
+    {
+      "files": 1000,
+      "functions": 6001,
+      "cold_build_and_query_seconds": 0.5688470680000819,
+      "snapshot_analysis_median_seconds": 0.0001942130000998077,
+      "scoped_search_seconds": 0.00022483899999770074,
+      "source_files_read_per_snapshot_analysis": 0,
+      "snapshot_bytes": 3698688,
+      "process_peak_rss_mb_linux": 23.03515625,
+      "target_found": true,
+      "snapshot": {
+        "captured_at": "2026-10-13T17:52:01.458021+00:00",
+        "git_revision": "unversioned",
+        "revision_note": "HEAD is recorded, but indexed files may include uncommitted changes.",
+        "files": 1000,
+        "documents": 0,
+        "excludes": [],
+        "documents_manifest": [],
+        "document_warnings": []
+      }
+    },
+    {
+      "files": 10000,
+      "functions": 60001,
+      "cold_build_and_query_seconds": 4.967576761999908,
+      "snapshot_analysis_median_seconds": 0.00012249500002781133,
+      "scoped_search_seconds": 0.00016605099995103956,
+      "source_files_read_per_snapshot_analysis": 0,
+      "snapshot_bytes": 36491264,
+      "process_peak_rss_mb_linux": 43.22265625,
+      "target_found": true,
+      "snapshot": {
+        "captured_at": "2026-10-13T17:52:06.853415+00:00",
+        "git_revision": "unversioned",
+        "revision_note": "HEAD is recorded, but indexed files may include uncommitted changes.",
+        "files": 10000,
+        "documents": 0,
+        "excludes": [],
+        "documents_manifest": [],
+        "document_warnings": []
+      }
+    }
+  ]
+}
