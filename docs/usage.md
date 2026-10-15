@@ -185,3 +185,59 @@ not implemented. A tool being available does not guarantee the host calls it.
 Fresh-process tests establish persistence and zero source traversal, not improved
 LLM resolution accuracy. Model-generated descriptions and client behavior require
 live evaluation with configured models/clients.
+
+### Explicit full scan and component relationships
+
+```bash
+# Cheap initial orientation (default): up to three source/document samples per folder.
+reqcontext map build /path/to/project --mode quick
+# Explicitly switch to full eligible-text coverage. Add --with-model for semantic summaries.
+reqcontext map refresh /path/to/project --mode full --with-model
+reqcontext map related /path/to/project --folder automotive/bmw
+# Keep full mode; defer ordinary component summary updates until five distinct files change.
+reqcontext map refresh /path/to/project --change-threshold 5 --with-model
+```
+
+Full mode reads every supported, nonexcluded UTF-8 text file up to the per-file
+limit (default 1 MB, configurable with `--max-file-bytes`). It reports skipped
+paths and reasons, plus Python parse failures. Hidden paths, symlinks and the same
+build/dependency directories as quick mode are excluded. It is **not** a promise to
+read binaries, every file type or every repository file. More than 100 MB of eligible
+text aborts the build and retains the previous map. Full scans hold eligible text
+in memory; this version targets bounded projects, not unrestricted monorepos.
+
+With `--with-model`, all eligible text participates in 6,000-character chunks;
+file summaries are reduced into folder summaries. This can make many model calls.
+Without a model, descriptions remain explicit inventories. Full input coverage
+cannot guarantee that a model summary preserves every relevant detail. Evidence
+validation checks supplied citation keys, not semantic correctness. File summaries
+are reused when their content hashes match. Source text is not stored in the map;
+paths, hashes, summaries, signature hashes and import evidence are stored locally.
+
+The threshold counts distinct changed/added/deleted eligible files **since the last
+summary**, separately for each folder. Repeated changes to one file count as one.
+Descriptions below threshold remain marked `pending`; live file inventory and
+relationship evidence still update. Python public-signature changes, import-edge
+changes, build files, deletions, child-folder changes, and changes to a file used by
+at least two component folders bypass the threshold. These are transparent refresh
+policies, not keyword rules for deciding what a requirement means. The threshold
+is supplied per refresh (default five); scan mode persists. A refresh without a
+model may replace invalidated semantic descriptions with honest inventories.
+
+`related_components` (MCP), `map related` (CLI), and `ProjectMap.related()` return
+one-hop dependencies and consumers with source path, target path and import line.
+For example, BMW and Mercedes imports of a shared diagnostics module link both
+folders to that shared component. Only uniquely matched static Python imports are
+supported initially. Dynamic imports, runtime dispatch, ambiguous/external imports,
+and relationships in C/C++ or other languages remain unknown. This is candidate
+scope, not proof of change impact. The refresh result also identifies consumers of
+changed files for review; it does not automatically rewrite their descriptions.
+
+Start a task with orientation, expand the relevant folder, then inspect related
+components and current source. Repeat expansion only where the requirement and
+source evidence justify it; ask the user about unresolved cross-component scope.
+Session loading, descriptions and relationship lookup read the saved JSON only;
+Git HEAD is a checkout hint. No background scan or automatic freshness guarantee
+is introduced. Explicit refresh still walks and hashes eligible files. Atomic
+publication protects readers from partial maps, but simultaneous writers use
+last-completed-writer wins and filesystem capture is not atomic.

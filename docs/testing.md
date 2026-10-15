@@ -30,3 +30,17 @@ well as latency and resource use. Keep raw experiment output outside version con
 include a concise result and limitations in the relevant PR.
 
 No live endpoint or storage hardware is needed for the committed regression suite.
+
+## Project-map regression checks
+
+`test_project_map.py` covers quick maps, atomic publication, the SessionStart JSON
+contract and fresh-process reuse. `test_map_scan.py` covers complete eligible-text
+chunking, mixed folders, shared BMW/Mercedes dependencies, relative imports,
+threshold accumulation and bypasses, exclusions, failed refresh rollback, and
+three new processes prohibited from traversing or opening source files.
+
+Performance evaluation should report cold build separately from fresh-session
+startup and requirement-to-relevant-file latency. Compare the same model and
+requests with/without orientation, measuring missed relevant files, unnecessary
+questions, tool calls, tokens and time. Local cache and parser tests do not establish
+model accuracy or end-to-end time savings. Keep raw benchmark output out of Git.

@@ -18,3 +18,6 @@ __all__.extend(["analyze", "ChatModel"])
 
 from .documents import SourceDocument
 __all__.append("SourceDocument")
+
+from .project_map import ProjectMap
+__all__.append("ProjectMap")

@@ -60,19 +60,25 @@ def snapshot_cli(argv):
 def map_cli(argv):
     from .project_map import ProjectMap
     parser = argparse.ArgumentParser(description="Persistent project orientation for fresh sessions")
-    parser.add_argument("operation", choices=["build", "refresh", "session", "describe"])
+    parser.add_argument("operation", choices=["build", "refresh", "session", "describe", "related"])
     parser.add_argument("directory")
     parser.add_argument("--cache", help="Optional map path outside the project")
     parser.add_argument("--folder", default=".")
-    parser.add_argument("--with-model", action="store_true", help="Send bounded samples to the configured model for folder descriptions")
+    parser.add_argument("--with-model", action="store_true", help="Send source samples (quick) or all eligible text (full) to the configured model")
+    parser.add_argument("--mode", choices=["quick", "full"], help="Initial default: quick; refresh preserves saved mode")
+    parser.add_argument("--change-threshold", type=int, default=5, help="Full scan: accumulated changed files per component before regenerating its summary")
+    parser.add_argument("--max-file-bytes", type=int, default=1_000_000)
     args = parser.parse_args(argv)
     try:
         project = ProjectMap(args.directory, cache=args.cache)
         if args.operation in {"build", "refresh"}:
-            result = project.build(refresh=args.operation == "refresh", model=ChatModel.from_env() if args.with_model else None)
-            print(json.dumps({"cache": str(project.cache), "folders": len(result["map"]["folders"]), "reused": result["reused"], "source_files_read": result["source_files_read"]}, indent=2))
+            result = project.build(refresh=args.operation == "refresh", model=ChatModel.from_env() if args.with_model else None,
+                                   mode=args.mode, change_threshold=args.change_threshold, max_file_bytes=args.max_file_bytes)
+            print(json.dumps({"cache": str(project.cache), "folders": len(result["map"]["folders"]), "reused": result["reused"], "source_files_read": result["source_files_read"], "scan_mode": result["map"].get("scan_mode", "quick"), "coverage": result["map"].get("coverage"), "refresh": result["map"].get("refresh")}, indent=2))
         elif args.operation == "session":
             print(project.overview())
+        elif args.operation == "related":
+            print(json.dumps(project.related(args.folder), indent=2))
         else:
             print(json.dumps(project.describe(args.folder), indent=2))
         return 0

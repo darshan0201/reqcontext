@@ -28,7 +28,7 @@ class SnapshotTools:
 
 def create_server(tools):
     from mcp.server.fastmcp import FastMCP
-    server=FastMCP("ReqContext",instructions="Use overview to select a few relevant folders, then search/read the stored snapshot. Explain folder selection with source citations. Existing code is not automatically normative. Normal lookup does not scan live files. Refresh explicitly when a new snapshot is needed.")
+    server=FastMCP("ReqContext",instructions="Start with project_orientation, then describe_component to select relevant folders. Use related_components to inspect evidence-backed dependencies and consumers when needed. These map tools require a prebuilt map and never scan source. Use the separate source-snapshot tools only for deeper investigation; their first use may build a missing snapshot. Explain folder selection with source citations. Existing code is not automatically normative. Normal lookup does not scan live files. Refresh explicitly when a new snapshot is needed.")
     @server.tool()
     def project_orientation() -> str:
         """Load the saved project map at session start, without scanning source files. Build it first with reqcontext map build DIRECTORY."""
@@ -40,6 +40,12 @@ def create_server(tools):
         """Expand a folder from the saved project orientation map."""
         from .project_map import ProjectMap
         return ProjectMap(tools.repo).describe(folder)
+
+    @server.tool()
+    def related_components(folder: str = ".") -> dict:
+        """Expand one component to dependencies and consumers with saved import evidence. Full map required for relationships; other-language/dynamic links remain unknown."""
+        from .project_map import ProjectMap
+        return ProjectMap(tools.repo).related(folder)
 
     @server.tool()
     def repository_overview() -> dict:

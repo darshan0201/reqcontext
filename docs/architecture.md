@@ -74,3 +74,19 @@ Python and syntactic C are supported. There is no full type resolver, call graph
 C preprocessor, OCR, embedding retriever or fine-tuned question policy. MCP lookup
 IDs are local to each response. The current target is one engineer/client; concurrent
 refresh writers and huge monorepositories are not load-tested.
+
+## Full project-map build
+
+`ProjectMap` owns map loading and atomic publication. `map_scan.py` owns explicit
+full-text collection, Python structural facts, component relationships, bounded
+model summarization, and threshold decisions. CLI and MCP adapters delegate to
+these APIs; session loading never calls the scanner. Quick maps remain compatible
+and require explicit refresh to switch modes. Folder descriptions cover direct
+files; child folders retain separate entries rather than having their purposes
+silently merged into a parent summary.
+
+The model interprets source responsibilities. Deterministic parsing supplies
+verifiable import edges and signature-change signals. The client model interprets
+the requirement against saved descriptions and follows relevant edges; no folder
+name keyword classifier chooses task scope. References remain navigation evidence,
+not an exhaustive dependency graph or an authorization to edit every linked folder.

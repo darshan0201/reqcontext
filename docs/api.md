@@ -73,3 +73,23 @@ CLI codes: 0 returned report, 2 input/configuration error, 3 failed model invest
 No automatic model retries are performed. The default HTTP adapter uses a 60-second
 request timeout and JSON-object chat responses; custom adapters supply their own
 transport policies. A per-call timeout is not an overall investigation deadline.
+
+### Full project orientation
+
+```python
+from reqcontext import ProjectMap
+
+project = ProjectMap('/path/to/project')
+project.build(mode='full')  # Explicit full eligible-text scan; inventory descriptions.
+project.build(refresh=True, mode='full', model=my_model, change_threshold=5)
+print(project.describe('automotive/bmw'))
+print(project.related('automotive/bmw'))  # Cached candidate folders + import evidence.
+```
+
+`my_model` is a callable receiving a dictionary with `instruction`, `folder`, and
+`samples`, returning `description` (1–300 characters) and a nonempty `evidence` list
+of supplied sample keys. It receives eligible source text; configure it only when
+that source may be sent to the chosen endpoint. Build/refresh returns the map,
+reuse status and successful source-file-read count. Full-map `coverage` records
+exclusions and parse failures; `refresh` records regenerated/pending components and
+consumers whose dependencies changed. See usage for resource and refresh limits.

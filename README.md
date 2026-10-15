@@ -1,22 +1,24 @@
 # ReqContext
 
-Repository context for AI coding agents, built from a reusable source snapshot.
+Persistent project orientation for fresh AI coding sessions.
 
-Give ReqContext an implementation requirement. It retrieves relevant code and lets
-an LLM identify the folders to inspect, constraints to consider and decisions that
-need clarification. After the initial snapshot, queries reuse stored evidence
-instead of scanning the entire repository again.
+Build a folder map once, then let new sessions load responsibilities and follow
+relevant component relationships without rediscovering the entire repository.
+Pass any directory path; ReqContext keeps its cache outside that project and
+requires no repository restructuring.
 
 ## What it does
 
-- Indexes Python and C source, symbols and folder structure in SQLite.
-- Offers scoped search and symbol lookup through a Python API, CLI or MCP server.
-- Lets a configured model investigate evidence and produce a cited implementation brief.
-- Stores task-specific clarification answers and explicitly selected PDF/text references.
-- Refreshes the snapshot on request, with rollback if an unexpected update fails.
+- Saves folder structure and optional model-written responsibility summaries.
+- Offers quick sampling or an explicitly selected full eligible-text scan.
+- Records Python import relationships with file and line evidence.
+- Refreshes explicitly, reusing summaries and tracking pending component changes.
+- Exposes cached orientation through Python, CLI, MCP and a SessionStart adapter.
+- Retains a separate SQLite source snapshot for deeper scoped investigation.
 
-ReqContext supplies context; it does not implement the requested code change.
-Search is lexical. Interpretation and clarification selection are performed by the model.
+ReqContext supplies navigation context; the coding agent interprets the requirement
+and inspects current source before editing. It does not guarantee complete impact
+analysis or automatically implement a change.
 
 ## Quick start: reusable project orientation
 
@@ -41,6 +43,19 @@ For model-written folder descriptions, configure `REQCONTEXT_BASE_URL`,
 `reqcontext map refresh /path/to/project --with-model`. This sends bounded source
 samples to that endpoint. Without a model, briefs are labeled documentation excerpts
 or inventories; semantic folder understanding is not claimed.
+
+For mixed-purpose folders or deeper coverage, opt into full mode:
+
+```bash
+reqcontext map refresh /path/to/project --mode full --with-model
+reqcontext map related /path/to/project --folder src
+```
+
+Full mode sends all eligible text through bounded chunks when a model is enabled.
+It reports exclusions and parse failures; relationships currently cover static
+Python imports only. Subsequent refreshes preserve scan mode. Ordinary changes
+accumulate per folder until the summary threshold (default five changed files);
+structural and shared-dependency changes bypass it. See [limits and refresh rules](docs/usage.md#explicit-full-scan-and-component-relationships).
 
 For automatic Claude Code session context, merge the hook example in
 [integration/claude-session-start.example.json](integration/claude-session-start.example.json)

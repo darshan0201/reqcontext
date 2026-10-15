@@ -9,13 +9,24 @@ async def run():
         root=Path(temp)/'repo';root.mkdir();(root/'src').mkdir()
         (root/'src/service.py').write_text('def submit_upload(data):\n    return data\n')
         env=dict(os.environ);env['PYTHONPATH']=str(Path(__file__).resolve().parents[2])
+        env['XDG_CACHE_HOME']=str(Path(temp)/'cache')
+        from unittest.mock import patch
+        from reqcontext import ProjectMap
+        with patch.dict(os.environ, {'XDG_CACHE_HOME': env['XDG_CACHE_HOME']}):
+            ProjectMap(root).build(mode='full')
         parameters=StdioServerParameters(command=sys.executable,args=['-m','reqcontext.mcp_server','--repo',str(root),'--snapshot',str(Path(temp)/'snapshot.db')],env=env)
         async with stdio_client(parameters) as (read,write):
             async with ClientSession(read,write) as session:
                 await session.initialize()
                 available=await session.list_tools()
                 names=[t.name for t in available.tools]
-                assert 'repository_overview' in names and 'snapshot_lookup' in names
+                assert {'repository_overview', 'snapshot_lookup', 'project_orientation',
+                        'describe_component', 'related_components'} <= set(names)
+                for name, arguments in [('project_orientation', {}),
+                                        ('describe_component', {'folder': 'src'}),
+                                        ('related_components', {'folder': 'src'})]:
+                    response = await session.call_tool(name, arguments)
+                    assert not response.isError, name
                 overview=await session.call_tool('repository_overview',{})
                 result=await session.call_tool('snapshot_lookup',{'action':{'tool':'read_symbol','path':'src/service.py','symbol':'submit_upload'}})
                 assert not result.isError
