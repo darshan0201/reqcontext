@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reqcontext"
+version = "0.5.1"
+description = "Evidence-backed repository context for incomplete requirements"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+reqcontext = "reqcontext.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["reqcontext*"]
+
+[project.optional-dependencies]
+c = ["tree-sitter>=0.25,<0.26", "tree-sitter-c>=0.24,<0.25"]
+
+documents = ["pypdf>=5,<7"]
+mcp = ["mcp>=1.10,<2"]

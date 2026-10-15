@@ -1,0 +1,243 @@
+# Snapshot-first investigation and MCP adapter
+
+## Behavior
+
+Build the snapshot once. It stores eligible source excerpts, folder counts, Python/C
+symbols, syntactic call-name relationships, hashes and reference-document excerpts.
+Ordinary analysis and plugin lookup use SQLite only; they do not enumerate, read or
+hash live source/reference files. The first request builds a missing snapshot, and
+an incompatible index-format upgrade rebuilds it once. Filesystem checks for the
+repository/cache location are still performed; the zero-read guarantee concerns
+source files, not the SQLite database itself.
+
+The model sees the compact root folder map and search candidates, chooses folders,
+then can search within a selected prefix or read selected symbols. The final report
+can include `scope` entries with a folder, reason and supporting evidence IDs. The
+runtime verifies that the cited evidence belongs to that folder. It does not prove
+that the selected folders are exhaustive or semantically correct.
+
+Example desired brief (illustrative, not a new model result):
+
+| Folder | Why inspect it |
+|---|---|
+| `plugins/fw` | Core firmware-download handler and retry helper |
+| `Documentation` | Firmware command options and documented behavior |
+| `tests/cli` | Relevant tests, after identifying the applicable command/vendor |
+
+The host should narrow further rather than read all files under these folders.
+
+## Build and use
+
+```bash
+python -m pip install ".[c,documents,mcp]"
+reqcontext snapshot build /path/to/repo --output /path/to/repo-snapshot.db
+reqcontext /path/to/repo --snapshot /path/to/repo-snapshot.db --requirement "Add retry support to firmware download"
+```
+
+The final command uses the REQCONTEXT model settings from [README.md](../README.md). To inspect
+source matches without a model, add `--retrieval-only`. To explicitly refresh:
+
+```bash
+reqcontext snapshot refresh /path/to/repo --output /path/to/repo-snapshot.db
+```
+
+A refresh enumerates and hashes eligible files, but reparses only changed content.
+It rebuilds derived folder/call-name maps from the index. It is not an event watcher
+or Git-diff-only refresh. No automatic source-freshness promise is made. Captured
+HEAD can differ from file content due to uncommitted edits; each excerpt has a hash.
+Snapshot evidence remains frozen until refresh. Source-bound clarifications are
+compared against that snapshot, not live source files.
+
+Snapshot caches are bound to their original repository root. This release does not
+provide portable/offline snapshots after the original repository directory is moved
+or removed. Exclusion/document-manifest changes require an explicit refresh.
+
+## Python API
+
+```python
+from reqcontext import analyze, SourceDocument
+
+brief = analyze(
+    "Handle reservation reports when registrant count changes",
+    repo="/path/to/nvme-cli",
+    snapshot="/path/to/repo-snapshot.db",
+)
+print(brief.scope)
+```
+
+For an explicit build/refresh with revision-labelled references:
+
+```python
+from reqcontext import RequirementContext, SourceDocument
+
+with RequirementContext(
+    "/path/to/repo", cache="/path/to/repo-snapshot.db",
+    documents=[SourceDocument(
+        "/path/to/spec.pdf", title="Device Specification",
+        revision="2.4", source_type="specification",
+    )],
+) as context:
+    context.refresh()
+```
+
+Text/PDF references must be explicitly selected. The PDF extra uses pypdf, preserves
+page numbers and warns about extraction limitations and textless pages. No OCR,
+diagram interpretation, password decryption or perfect table extraction is provided.
+Limits: 50 MB input, 500 PDF pages, 2 million extracted characters per reference.
+Source type/revision are user-supplied metadata; the model must assess applicability.
+
+Omitting reference selections on an explicit refresh removes previously imported
+reference records. Reopening an existing snapshot without refresh preserves its
+stored references and requires no access to their original files.
+
+## MCP plugin-style use
+
+The adapter is a local stdio MCP server; it is not an automatically installed
+ChatGPT marketplace plugin. Add it to a client that supports stdio MCP using your
+client's configuration format. [MCP client example](../integration/mcp-client.example.json) is an example
+of the common `mcpServers` format; replace paths and use the Python interpreter in
+which the package/extras are installed. Windows accepts absolute Windows paths in
+JSON with appropriate escaping. Configure documents with repeated `--document` args
+if the server should include them when refreshing.
+
+```bash
+python -m reqcontext.mcp_server --repo /path/to/repo --snapshot /path/to/repo-snapshot.db
+```
+
+Tools:
+- `repository_overview`: captured revision/time and folder map.
+- `snapshot_lookup`: folder and symbol-fragment listing, scoped search, source/symbol/document reads,
+  and syntactic caller/callee name matches from the snapshot.
+- `refresh_repository_snapshot`: explicit source refresh.
+- `analyze_requirement`: optional nested model-driven analysis.
+
+**No separate model endpoint is necessary for overview/lookup:** the MCP host's
+existing model reasons over their results. The optional `analyze_requirement` tool
+requires a separately configured endpoint because it runs the library's own loop.
+The SDK extra deliberately targets the documented v1 API and was tested with mcp
+1.30.0. This is not a v2 SDK adapter.
+
+The server opens a new context per tool invocation so SQLite connections do not
+cross tool threads. It has not been load-tested for multiple concurrent refresh
+writers. Initial deployment target is one engineer/client.
+
+## v0.5.1 refresh publication
+
+Refresh uses one SQLite transaction for source/reference rows, derived maps and capture metadata. Unexpected failure preserves the previous snapshot. Individually failed references are removed with warnings in an otherwise successful refresh. This does not make filesystem capture atomic or automatically detect stale files.
+
+## Provider interoperability
+
+The integration boundary is the MCP tool interface. The host chooses its model;
+ReqContext supplies repository evidence. Host-driven lookup does not require the
+library's own model API key or a second reasoning endpoint.
+
+| Integration path | Current status |
+|---|---|
+| MCP over local stdio | Automated SDK client/server smoke coverage |
+| OpenAI and Anthropic coding clients | Intended integration targets; individual client validation pending |
+| Other clients supporting compatible stdio MCP tools | Protocol-level integration path; client-specific validation required |
+| Direct chat-completions-compatible endpoint | Adapter implemented; live provider compatibility not validated in CI |
+| Native Anthropic Messages API | No built-in adapter; use host-driven MCP or supply a model callable |
+| Remote HTTP MCP hosting | Not implemented |
+
+The JSON configuration under `integration/` illustrates a common client schema;
+it is not a universal configuration format. Check the chosen client's supported
+transport and configuration before connecting it.
+
+Client compatibility is distinct from company adoption. Do not claim that OpenAI,
+Anthropic or another company uses, endorses or has validated this project.
+
+## Persistent project orientation
+
+`reqcontext map build DIRECTORY` walks an arbitrary directory, including non-Git
+projects. It records all eligible folders, filenames and bounded documentation/source
+samples. It ignores hidden, dependency/build and symlink directories. It does not
+currently honor every custom Git ignore rule. Review source suitability before
+opting into remote-model summaries; there is no secret scanner.
+
+The default map lives under the user's cache directory, keyed by canonical project
+path. `--cache` can override it, but must point outside the project. Session reads
+never walk source directories. Explicit refresh traverses again; unchanged sampled
+model descriptions are reused. Fingerprints cover sampled text and directory
+membership, not every byte of every file. Changes outside samples can be missed.
+
+The overview is bounded to 6,000 characters and contains the root and top-level
+components. Use `map describe DIRECTORY --folder PATH` or the MCP
+`describe_component` tool to expand deeper folders. `project_orientation` reads the
+same default map through MCP. The overview warns when Git HEAD differs. Uncommitted
+changes are not checked. Each worktree/path has its own map; cross-worktree summary
+sharing and selective refresh are future work. Concurrent writes publish complete
+files, but the last completed refresh wins.
+
+### Session integration
+
+The Claude Code adapter reads SessionStart JSON from stdin and emits
+`hookSpecificOutput.additionalContext`. Merge the example into existing user-level
+settings rather than replacing other settings. Use an absolute Python interpreter
+path when needed. A missing map reports a warning and allows the session to start.
+This adapter's JSON contract is locally tested; no authenticated Claude Code session
+has been run here. Reference: https://code.claude.com/docs/en/hooks
+
+For other clients, use the MCP orientation tool or feed `map session DIRECTORY`
+output into their supported context mechanism. Automatic Codex startup injection is
+not implemented. A tool being available does not guarantee the host calls it.
+
+Fresh-process tests establish persistence and zero source traversal, not improved
+LLM resolution accuracy. Model-generated descriptions and client behavior require
+live evaluation with configured models/clients.
+
+### Explicit full scan and component relationships
+
+```bash
+# Cheap initial orientation (default): up to three source/document samples per folder.
+reqcontext map build /path/to/project --mode quick
+# Explicitly switch to full eligible-text coverage. Add --with-model for semantic summaries.
+reqcontext map refresh /path/to/project --mode full --with-model
+reqcontext map related /path/to/project --folder automotive/bmw
+# Keep full mode; defer ordinary component summary updates until five distinct files change.
+reqcontext map refresh /path/to/project --change-threshold 5 --with-model
+```
+
+Full mode reads every supported, nonexcluded UTF-8 text file up to the per-file
+limit (default 1 MB, configurable with `--max-file-bytes`). It reports skipped
+paths and reasons, plus Python parse failures. Hidden paths, symlinks and the same
+build/dependency directories as quick mode are excluded. It is **not** a promise to
+read binaries, every file type or every repository file. More than 100 MB of eligible
+text aborts the build and retains the previous map. Full scans hold eligible text
+in memory; this version targets bounded projects, not unrestricted monorepos.
+
+With `--with-model`, all eligible text participates in 6,000-character chunks;
+file summaries are reduced into folder summaries. This can make many model calls.
+Without a model, descriptions remain explicit inventories. Full input coverage
+cannot guarantee that a model summary preserves every relevant detail. Evidence
+validation checks supplied citation keys, not semantic correctness. File summaries
+are reused when their content hashes match. Source text is not stored in the map;
+paths, hashes, summaries, signature hashes and import evidence are stored locally.
+
+The threshold counts distinct changed/added/deleted eligible files **since the last
+summary**, separately for each folder. Repeated changes to one file count as one.
+Descriptions below threshold remain marked `pending`; live file inventory and
+relationship evidence still update. Python public-signature changes, import-edge
+changes, build files, deletions, child-folder changes, and changes to a file used by
+at least two component folders bypass the threshold. These are transparent refresh
+policies, not keyword rules for deciding what a requirement means. The threshold
+is supplied per refresh (default five); scan mode persists. A refresh without a
+model may replace invalidated semantic descriptions with honest inventories.
+
+`related_components` (MCP), `map related` (CLI), and `ProjectMap.related()` return
+one-hop dependencies and consumers with source path, target path and import line.
+For example, BMW and Mercedes imports of a shared diagnostics module link both
+folders to that shared component. Only uniquely matched static Python imports are
+supported initially. Dynamic imports, runtime dispatch, ambiguous/external imports,
+and relationships in C/C++ or other languages remain unknown. This is candidate
+scope, not proof of change impact. The refresh result also identifies consumers of
+changed files for review; it does not automatically rewrite their descriptions.
+
+Start a task with orientation, expand the relevant folder, then inspect related
+components and current source. Repeat expansion only where the requirement and
+source evidence justify it; ask the user about unresolved cross-component scope.
+Session loading, descriptions and relationship lookup read the saved JSON only;
+Git HEAD is a checkout hint. No background scan or automatic freshness guarantee
+is introduced. Explicit refresh still walks and hashes eligible files. Atomic
+publication protects readers from partial maps, but simultaneous writers use
+last-completed-writer wins and filesystem capture is not atomic.

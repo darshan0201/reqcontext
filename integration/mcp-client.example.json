@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "reqcontext": {
+      "command": "python",
+      "args": [
+        "-m", "reqcontext.mcp_server",
+        "--repo", "/absolute/path/to/repository",
+        "--snapshot", "/absolute/path/to/repo-snapshot.db"
+      ]
+    }
+  }
+}
