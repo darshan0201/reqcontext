@@ -146,3 +146,42 @@ transport and configuration before connecting it.
 
 Client compatibility is distinct from company adoption. Do not claim that OpenAI,
 Anthropic or another company uses, endorses or has validated this project.
+
+## Persistent project orientation
+
+`reqcontext map build DIRECTORY` walks an arbitrary directory, including non-Git
+projects. It records all eligible folders, filenames and bounded documentation/source
+samples. It ignores hidden, dependency/build and symlink directories. It does not
+currently honor every custom Git ignore rule. Review source suitability before
+opting into remote-model summaries; there is no secret scanner.
+
+The default map lives under the user's cache directory, keyed by canonical project
+path. `--cache` can override it, but must point outside the project. Session reads
+never walk source directories. Explicit refresh traverses again; unchanged sampled
+model descriptions are reused. Fingerprints cover sampled text and directory
+membership, not every byte of every file. Changes outside samples can be missed.
+
+The overview is bounded to 6,000 characters and contains the root and top-level
+components. Use `map describe DIRECTORY --folder PATH` or the MCP
+`describe_component` tool to expand deeper folders. `project_orientation` reads the
+same default map through MCP. The overview warns when Git HEAD differs. Uncommitted
+changes are not checked. Each worktree/path has its own map; cross-worktree summary
+sharing and selective refresh are future work. Concurrent writes publish complete
+files, but the last completed refresh wins.
+
+### Session integration
+
+The Claude Code adapter reads SessionStart JSON from stdin and emits
+`hookSpecificOutput.additionalContext`. Merge the example into existing user-level
+settings rather than replacing other settings. Use an absolute Python interpreter
+path when needed. A missing map reports a warning and allows the session to start.
+This adapter's JSON contract is locally tested; no authenticated Claude Code session
+has been run here. Reference: https://code.claude.com/docs/en/hooks
+
+For other clients, use the MCP orientation tool or feed `map session DIRECTORY`
+output into their supported context mechanism. Automatic Codex startup injection is
+not implemented. A tool being available does not guarantee the host calls it.
+
+Fresh-process tests establish persistence and zero source traversal, not improved
+LLM resolution accuracy. Model-generated descriptions and client behavior require
+live evaluation with configured models/clients.

@@ -30,6 +30,18 @@ def create_server(tools):
     from mcp.server.fastmcp import FastMCP
     server=FastMCP("ReqContext",instructions="Use overview to select a few relevant folders, then search/read the stored snapshot. Explain folder selection with source citations. Existing code is not automatically normative. Normal lookup does not scan live files. Refresh explicitly when a new snapshot is needed.")
     @server.tool()
+    def project_orientation() -> str:
+        """Load the saved project map at session start, without scanning source files. Build it first with reqcontext map build DIRECTORY."""
+        from .project_map import ProjectMap
+        return ProjectMap(tools.repo).overview()
+
+    @server.tool()
+    def describe_component(folder: str = ".") -> dict:
+        """Expand a folder from the saved project orientation map."""
+        from .project_map import ProjectMap
+        return ProjectMap(tools.repo).describe(folder)
+
+    @server.tool()
     def repository_overview() -> dict:
         """Read snapshot capture information and root folder counts."""
         return tools.overview()

@@ -18,34 +18,37 @@ instead of scanning the entire repository again.
 ReqContext supplies context; it does not implement the requested code change.
 Search is lexical. Interpretation and clarification selection are performed by the model.
 
-## Quick start
+## Quick start: reusable project orientation
 
-Requires Python 3.11+ and SQLite with FTS5. From a checkout of this repository:
+Requires Python 3.11+. Install from this checkout, then supply any directory:
 
 ```bash
 python -m pip install -e .
-reqcontext snapshot build examples/upload_app --output example.db
-reqcontext examples/upload_app --snapshot example.db --requirement "Add upload retries" --retrieval-only
+reqcontext map build /path/to/project
+reqcontext map session /path/to/project
+reqcontext map describe /path/to/project --folder src
 ```
 
-This example runs without an API key and returns source matches. For model-generated
-folder recommendations and clarifications, configure `REQCONTEXT_BASE_URL` and
-`REQCONTEXT_MODEL`, plus `REQCONTEXT_API_KEY` if your endpoint requires it. Store keys
-in your local environment. The endpoint must support JSON chat-completion responses.
+Build traverses internally once and stores a compact map outside your project.
+Repeated builds and session reads reuse it. Refresh when structure or responsibilities change:
 
-```python
-from reqcontext import analyze
-
-brief = analyze(
-    "Add upload retries",
-    repo="examples/upload_app",
-    snapshot="example.db",
-)
-print(brief.to_markdown())
+```bash
+reqcontext map refresh /path/to/project
 ```
 
-The Markdown brief lists source locations and conclusions. Full source fingerprints
-remain available in `brief.to_dict()` or `brief.to_markdown(include_provenance=True)`.
+For model-written folder descriptions, configure `REQCONTEXT_BASE_URL`,
+`REQCONTEXT_MODEL` and, if required, `REQCONTEXT_API_KEY`, then use
+`reqcontext map refresh /path/to/project --with-model`. This sends bounded source
+samples to that endpoint. Without a model, briefs are labeled documentation excerpts
+or inventories; semantic folder understanding is not claimed.
+
+For automatic Claude Code session context, merge the hook example in
+[integration/claude-session-start.example.json](integration/claude-session-start.example.json)
+into your user-level settings. Use the Python interpreter where ReqContext is installed.
+No repository layout changes are required. Build the map for the session's working
+directory first. See [project map usage](docs/usage.md#persistent-project-orientation).
+
+The original source-snapshot API remains available for deeper investigation.
 
 ## MCP and optional features
 
